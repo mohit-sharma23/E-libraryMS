@@ -1,0 +1,46 @@
+{% extends "Book/base.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'Book/css/home.css' %}? {% now "U" %}">
+{% endblock %}
+{% block content %}
+
+<h2 style="margin-top:2em">&nbsp;&nbsp;TOP SEARCHES :</h2>
+<div class="marimg container">
+    <div class="row pt-2 ">
+        <div class="top-search">
+             {% for o in top %}
+                 <div class="col-3">
+                     <a class="article-title" href="{% url 'book-detail' o.id %}"><img src="{{o.Image}}" style="width:60%;height:75%"></a>
+                     <p><span class="name">{{o.Book_name}}</span></p>
+                 </div>
+             {% endfor %}
+         </div>
+         <div class="shel1">
+             <img src="../../static/Book/images/ekshelf.png">
+         </div>
+     </div>
+</div>
+<h2>&nbsp;&nbsp;All Books :</h2>
+<div class="marimgcon container">
+    {% for post in posts %}
+    <div class="row pt-2 ">
+       <div class="pa">
+            {% for o in post %}
+                <div class="col-3 marrow">
+                    <a class="article-title" href="{% url 'book-detail' o.id %}"><img src="{{o.Image}}" style="width:60%;height:75%"></a>
+                    <p><span class="name">{{o.Book_name}}</span></p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="shel">
+            <img src="../../static/Book/images/ekshelf.png">
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}
+{% block js %}
+ 
+        <!-- <script src="{% static 'Book/js/home.js' %}? {% now "U" %}"></script> -->
+{% endblock %}

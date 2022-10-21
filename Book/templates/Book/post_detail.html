@@ -1,0 +1,301 @@
+{% extends "Book/base.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'Book/css/book-detail.css' %}?{% now "U" %}">
+<script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+<script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
+{% block content %}
+    
+    <div class="container topevery">
+        <div class="row">
+            <div class="col-3">
+                <!-- <h1>"{{object.Image.url}}"</h1> -->
+                <img class="bookImg" src="{{object.Image.url}}">
+                <hr class="imginfo">
+                <p>Author: {{ object.Author }}</p>
+                <p>Genre: {{ object.Genre }}</p>
+                <p>Language: {{ object.Language }}</p>
+                <p>Published in:{{ object.PublishedIn  | date}}</p>
+                <p>Uploaded on:{{ object.date_uploaded | date}}</p>
+                <button class="btn btn-success upv"data-book="{{ object.id }}">Upvote&nbsp;&nbsp;<span class="upvotes {{ object.pk }}">{{ object.upvotes.count }}</span></button>
+              
+
+            </div>
+            <div class = "vertical">
+            <div class = "row container">
+                <div class="col-9">
+                    <h1 class="bookname">{{ object.Book_name }}</h1>
+                </div>
+                <div class="col-3">
+                    <button class="btn fav1 fav "data-book="{{object.id}}">Add to Favourites&nbsp;&nbsp;<span class="fav {{ object.pk }}"></span></button>
+                </div>
+                <!-- <i class="fas fa-star"></i> -->
+            </div>
+            
+
+            <div class="col-9">
+                <h4 class="bookname"> Info</h4>
+                <p class="bookname">{{ object.Info }}</p>
+
+                {% if object.SPrice == 0 %}
+                <a class="btn btn-warning reads ml-2" href="{{object.File.url}}"  data-book="{{ object.id }}">Read Online&nbsp;&nbsp;</a>
+                <span class="reads {{ object.pk }} ml-2" style="color: white">Total Reads: {{ object.reads.count }}</span><br/><br/>
+                {% endif %}
+                {% if object.SPrice == 0 %}
+                <a class="btn btn-info down ml-2" href="{{object.File.url}}" download="{{object.File.url}}" data-book="{{ object.id }}">Download Pdf&nbsp;&nbsp;</a>
+                <span class="downloads {{ object.pk }} ml-2" style="color: white">Total Downloads: {{ object.downloads.count }}</span>
+                {% endif %}
+                {% if object.SPrice != 0 %}
+                <a class="btn btn-success ml-2" href="{% url 'go' object.id 1 %}">Buy Soft Copy</a>
+                <p class="Price ml-2">Rs {{object.SPrice}}.0</p>
+                {% endif %}
+                {% if object.HPrice != 0 %}
+                <a class="btn btn-danger ml-2" href="{% url 'go' object.id 2 %}">Buy Hard Copy</a>
+                <p class="Price ml-2">Rs {{object.HPrice}}.0</p>
+                {% endif %}
+              
+
+
+                <h4 class="mt-4" style="color: white">Report Book</h4>
+                {% if message_name %}
+                    <center>
+                        <h2 style="color: white"></h2>Thanks {{ message_name }}</h2>
+                        <p>Your request has been received by us..We will take necessary changes soon...</p>
+
+                    </center>
+
+                {% else %}
+
+                <form action="{% url 'report' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row mt-3">
+                        <div class="col-lg-6">
+                            <input type="text" name="message-name" class="form-control mb-30 fo" placeholder="Your Name">
+                        </div>
+                        <input type="hidden" name="id" placeholder="Your Name" value="{{object.id}}">
+                        <!-- <div class="col-lg-6">
+                            <input type="email" name="message-email" class="form-control mb-30" placeholder="Your Email">
+                        </div> -->
+                        <div class="col-12 mt-3">
+                            <textarea name="message" class="form-control mb-30 fo" placeholder="Your Message"></textarea>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button type="submit" class="btn btn-success">Send Message</button>
+                        </div>
+
+                    </div>
+                </form>
+
+                {% endif %}
+
+
+
+            </div>
+            <!-- <div class="col-9">
+                <h1 class="bookname">Hunger Games</h1>
+            </div> -->
+        </div>
+    </div>
+   {% endblock content %}
+   
+   {% block js %}
+   <script>
+
+// const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+// export default async function handler(req, res) {
+//   if (req.method === 'POST') {
+//     try {
+//       // Create Checkout Sessions from body params.
+//       const session = await stripe.checkout.sessions.create({
+//         line_items: [
+//           {
+//             // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+//             price: '{{PRICE_ID}}',
+//             quantity: 1,
+//           },
+//         ],
+//         mode: 'payment',
+//         success_url: `${req.headers.origin}/?success=true`,
+//         cancel_url: `${req.headers.origin}/?canceled=true`,
+//       });
+//       res.redirect(303, session.url);
+//     } catch (err) {
+//       res.status(err.statusCode || 500).json(err.message);
+//     }
+//   } else {
+//     res.setHeader('Allow', 'POST');
+//     res.status(405).end('Method Not Allowed');
+//   }
+// }
+
+    // 'use strict';
+    // console.log('hjsjdfj');
+    
+    // const favbtn=document.querySelector('.fav');
+    
+    // favbtn.addEventListener('click',function(){
+    //     console.log(getComputedStyle(favbtn).backgroundColor);
+    //     if(getComputedStyle(favbtn).backgroundColor==="rgb(0, 128, 0)"){
+    //         console.log('llk')
+    //         favbtn.style.backgroundColor='red';
+    //     }
+    //     else if(getComputedStyle(favbtn).backgroundColor==='rgb(255, 0, 0)'){
+    //         favbtn.style.backgroundColor='green';
+    //     }
+        
+    // });
+
+    $(document).ready(function(){
+        $('.upv').on('click',function(){
+            console.log("llll")
+            var e=$(this).data('book');
+            $.ajax({
+                type: "post",
+                url: "{% url 'upvote' %}",
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+                data: {
+                    book:e,
+                    csrfmiddlewaretoken:"{{csrf_token}}",
+                },
+                datatype: "json",
+                success: function(response) {
+                    if(response.bool==true){
+                        var e1=$('.'+e+'.upvotes').text();
+                        let r=parseInt(e1);
+                        r++;
+                        $('.'+e+'.upvotes').text(r);
+                    }
+                    else{
+                        var e1=$('.'+e+'.upvotes').text();
+                        let r=parseInt(e1);
+                        r--;
+                        $('.'+e+'.upvotes').text(r);
+                    }
+                },
+                error: function(response){
+                    console.log(response)
+                }
+
+            });
+        });
+
+        $('.down').on('click',function(){
+            console.log("llll")
+            var e=$(this).data('book');
+            $.ajax({
+                type: "post",
+                url: "{% url 'downloads' %}",
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+                data: {
+                    book:e,
+                    csrfmiddlewaretoken:"{{csrf_token}}",
+                },
+                datatype: "json",
+                success: function(response) {
+                    if(response.bool==true){
+                        var e1=$('.'+e+'.downloads').text();
+                        let r=parseInt(e1);
+                        r++;
+                        $('.'+e+'.downloads').text(r);
+                    }
+                    else{
+                        var e1=$('.'+e+'.downloads').text();
+                        let r=parseInt(e1);
+                        $('.'+e+'.downloads').text(r);
+                    }
+                },
+                error: function(response){
+                    console.log(response)
+                }
+
+            });
+        });
+
+        $('.reads').on('click',function(){
+            console.log("llll")
+            var e=$(this).data('book');
+            $.ajax({
+                type: "post",
+                url: "{% url 'reads' %}",
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+                data: {
+                    book:e,
+                    csrfmiddlewaretoken:"{{csrf_token}}",
+                },
+                datatype: "json",
+                success: function(response) {
+                    if(response.bool==true){
+                        var e1=$('.'+e+'.reads').text();
+                        let r=parseInt(e1);
+                        r++;
+                        $('.'+e+'.reads').text(r);
+                    }
+                    else{
+                        var e1=$('.'+e+'.reads').text();
+                        let r=parseInt(e1);
+                        $('.'+e+'.reads').text(r);
+                    }
+                },
+                error: function(response){
+                    console.log(response)
+                }
+
+            });
+        });
+
+        $('.fav').on('click',function(){
+            console.log("llll")
+            var e=$(this).data('book');
+            $.ajax({
+                type: "post",
+                url: "{% url 'fav' %}",
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+                data: {
+                    book:e,
+                    csrfmiddlewaretoken:"{{csrf_token}}",
+                },
+                datatype: "json",
+                success: function(response) {
+                    if(response.bool){
+                        document.querySelector('.fav1').textContent ="Saved"
+                        var e1=$('.'+e+'.fav').text();
+                        let r=parseInt(e1);
+                        r++;
+                        $('.'+e+'.fav').text(r);
+                        const favbtn=document.querySelector('.fav');
+    
+                    //    favbtn.addEventListener('click',function(){
+
+                        console.log(getComputedStyle(favbtn).backgroundColor);
+                        favbtn.style.backgroundColor='green';
+                         
+                    // })
+                }
+                
+                    else{
+                        document.querySelector('.fav1').textContent ="Add to Favourites"
+                        var e1=$('.'+e+'.fav').text();
+                        let r=parseInt(e1);
+                        r--;
+                        $('.'+e+'.fav').text(r);
+                        const favbtn=document.querySelector('.fav');
+                        // favbtn.addEventListener('click',function(){
+                        console.log(getComputedStyle(favbtn).backgroundColor);
+                        favbtn.style.backgroundColor='green';
+                        // })
+                    }
+                },
+                error: function(response){
+                    console.log(response)
+                }
+
+            });
+        })
+    }); 
+
+    </script>
+        <!-- <script src="{% static 'Book/js/home.js' %}? {% now "U" %}"></script> -->
+   {% endblock js %}
+   

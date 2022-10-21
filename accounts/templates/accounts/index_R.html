@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+  
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+    
+    <link rel="stylesheet" href="../static/style.css">
+         
+    <title>Login & Registration Form</title>
+</head>
+<body>
+    <!-- <div class="content-section">
+        <form method="POST">
+          {% csrf_token %}
+          <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Log-In</legend>
+            {{ form }}
+          </fieldset>
+          <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">Sign UP</button>
+          </div>
+        </form>
+        <div class="border-top pt-3">
+          <small class="text-muted">
+            Need an Account?
+            <a class="ml-2" href="{% url 'register' %}">Sign-Up</a>
+          </small>
+        </div>
+      </div> -->
+
+
+
+
+      
+    <div class="container">
+        <div class="forms">
+            <div class="form login">
+                <span class="title">Login</span>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    {% if messages %}
+
+                  {% for message in messages %}
+                 <div class="alert alert-info">
+                       {{ message }}
+                    </div>
+                     {% endfor %}
+                    {% endif %}
+                    <div class="input-field">
+                        <label for="id_username" hidden>Username:</label>
+                        <input type="text" name="username" placeholder="Enter your Username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username">
+                        <i class="uil uil-user"></i>
+                    </div>
+                    <div class="input-field">
+                        <label for="id_password" hidden>Password:</label>
+                        <input type="password" id="mera" name="password" placeholder="Enter your Password"autocomplete="current-password" required id="id_password">                        <i class="uil uil-lock icon"></i>
+                        <i class="uil uil-eye-slash showHidePw"></i>
+                    </div>
+
+                    <div class="checkbox-text">
+                        <div class="checkbox-content">
+                            <input type="checkbox" id="logCheck">
+                            <label for="logCheck" class="text">Remember me</label>
+                        </div>
+                        
+                        <a href="{% url 'forget-password'%}" class="text">Forgot password?</a>
+                    </div>
+
+                </fieldset>
+                <br>
+                <div class="form-group login" style="text-align: center">
+                  <button class="btn" style="background-color: #4070f4; color:white" type="submit">Log In</button>
+                </div>
+              </form>
+                </form>
+
+                <div class="login-signup">
+                    <span class="text">Not a member?
+                        <a href="#" class="text signup-link">Signup now</a>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Registration Form -->
+            <div class="form signup " style="margin-top: 5em">
+                <span class="title">Registration</span>
+
+                <form action="/register/" method="post">
+                    {%csrf_token%}
+                    <div class="input-field">
+                        <input type="text" name="first_name" placeholder="Enter your name" required>
+                        <i class="uil uil-user"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" name="username" placeholder="Enter your usernamename" required>
+                        <i class="uil uil-user"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" name="email" placeholder="Enter your email" required>
+                        <i class="uil uil-envelope icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" name="password1" class="password" placeholder="Create a password" required>
+                        <i class="uil uil-lock icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" name="password2" class="password" placeholder="Confirm a password" required>
+                        <i class="uil uil-lock icon"></i>
+                        <i class="uil uil-eye-slash showHidePw"></i>
+                    </div>
+
+                    <div class="checkbox-text">
+                        <div class="checkbox-content">
+                            <input type="checkbox" id="sigCheck">
+                            <label for="sigCheck" class="text">Remember me</label>
+                        </div>
+                
+                        
+                        <a href="{% url 'forget-password'%}" class="text">Forgot password?</a>
+                    </div>
+
+                    <div class="input-field button">
+                        <input type="submit" value="Register">
+                    </div>
+                </form>
+
+                <div class="login-signup">
+                    <span class="text">Already a member?
+                        <a href="#" class="text login-link">Signup now</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="content-section">
+        <form method="POST">
+          {% csrf_token %}
+          <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Log-In</legend>
+            {{ form }}
+          </fieldset>
+          <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">Sign UP</button>
+          </div>
+        </form>
+        <div class="border-top pt-3">
+          <small class="text-muted">
+            Need an Account?
+            <a class="ml-2" href="{% url 'register' %}">Sign-Up</a>
+          </small>
+        </div>
+      </div> -->
+
+      <script src="{% static 'Book/js/script.js' %}? {% now "U" %}"></script>
+    <!-- <script src="../static/script.js"></script> -->
+
+</body>
+</html>

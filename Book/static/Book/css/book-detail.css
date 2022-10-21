@@ -1,0 +1,40 @@
+body {
+  background-image: url("../images/brownbg.jpg");
+  background-size: cover;
+}
+.topevery {
+  margin-top: 5%;
+}
+.bookname {
+  color: white;
+  margin-bottom: 1em;
+}
+.fav {
+  background-color: green;
+  color: white;
+  float: right;
+  /* position: absolute;
+  top: 0;
+  right: 0; */
+}
+.bookImg {
+  width: 170px;
+  height: 250px;
+  margin-top: 5%;
+}
+.vertical {
+  border-left: 2px solid white;
+  height: 100%;
+  position: absolute;
+  left: 25%;
+}
+p {
+  color: white;
+}
+.imginfo {
+  color: white;
+}
+.fo{
+  background-color:rgb(79, 0, 0);
+  text-decoration-color: white; 
+}

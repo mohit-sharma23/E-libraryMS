@@ -1,0 +1,26 @@
+<html>
+<Head>
+<title>
+    {{title}}
+</title>
+
+</Head>
+<body>
+    Welcome to my website
+    <div>{{hello}}</div>
+    <table border="1" >
+        <tr>
+            <th>Name</th>
+            <th>Phone Number</th>
+        </tr>
+        {% for d in student_details %}
+        <tr>
+            <td>{{d.name}}</td>
+            <td>{{d.phone}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+
+</html>
